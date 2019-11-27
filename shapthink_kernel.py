@@ -10,10 +10,8 @@ Sphinx Documentation Status:
 
 """
 import scipy.special
-import numpy as np
 import itertools
 from numpy.random import choice
-
 import numpy as np
 
 
@@ -76,7 +74,7 @@ class KernelSHap:
         y = self.predict_func(V)
         out = self.weighted_linear_reg(X, weights, y)
         if as_dict:
-            return {i: j for i, j in zip(column_mapping, out[:-1])}, out[-1]
+            return {i: j for i, j in zip(column_mapping, out[:-1])}, out
         return out
 
     @staticmethod
@@ -98,16 +96,18 @@ if __name__ == '__main__':
     column_mapping = ['Smoking', 'Yellow_Fingers', 'Anxiety', 'Peer_Pressure', 'Genetics', 'Attention_Disorder',
                       'Born_an_Even_Day', 'Car_Accident', 'Fatigue', 'Allergy', 'Coughing']
     a = KernelSHap(num_features=11, predict_func=predict, bayesian_network=network, column_mapping=column_mapping,
-                   label_name="Lung_cancer", causal_sampling=False)
+                   label_name="Lung_cancer", causal_sampling=True)
     # start = time.time()
     # print(X_test)
-    data = X_test.values[9]
+    index = 0
+    data = X_test.values[index]
     print(data)
-    out= a.explain(data,as_dict=False)
+    dic_out, out= a.explain(data,as_dict=True)
     # print(predict([data]))
     # print(time.time()-start)
+    print(dic_out)
     import shap
-    shap.image_plot(out[0:-1],X_test.iloc[9, :])
+    # shap.image_plot(out[0:-1],X_test.iloc[9, :])
     print(out)
     # print()
-    shap.force_plot(out[-1], out[0:-1], X_test.iloc[9, :])
+    shap.force_plot(out[-1], out[0:-1], X_test.iloc[index, :], matplotlib=True, out_names="Causal True")
