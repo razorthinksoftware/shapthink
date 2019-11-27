@@ -133,9 +133,9 @@ network.bake()
 beliefs = network.predict_proba({"Genetics":"T"},max_iterations=100000)
 # print(beliefs)
 # beliefs = map(str, beliefs)
-for state, belief in zip(network.states, beliefs):
-    if hasattr(belief,"parameters"):
-        print(state.name,belief.parameters)
+# for state, belief in zip(network.states, beliefs):
+#     if hasattr(belief,"parameters"):
+#         print(state.name,belief.parameters)
 # exit()
 # network.add_edge(s1, s3)
 # network.add_edge(s2, s3)

@@ -30,10 +30,14 @@ def kernel_shap(f, x, reference, M):
     ws = {}
     for i, s in enumerate(powerset(range(M))):
         s = list(s)
+        print(s)
         V[i, s] = x[s]
         X[i, s] = 1
         ws[len(s)] = ws.get(len(s), 0) + shapley_kernel(M, len(s))
         weights[i] = shapley_kernel(M, len(s))
+    # print(X)
+    # print(V)
+    exit()
     y = f(V)
     tmp = np.linalg.inv(np.dot(np.dot(X.T, np.diag(weights)), X))
     return np.dot(tmp, np.dot(np.dot(X.T, np.diag(weights)), y))
