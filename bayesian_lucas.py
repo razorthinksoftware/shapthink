@@ -86,18 +86,18 @@ coughing_allergy_lung_cancer = [
     ["F", "T", "T", 1 - 0.99],
 ]
 
-Attention = ConditionalProbabilityTable(table=attention_genetics, parents=[Genetics])
+Attention_Disorder = ConditionalProbabilityTable(table=attention_genetics, parents=[Genetics])
 Smoking = ConditionalProbabilityTable(table=smoking_peer_pressure_anxiety,
                                                             parents=[Peer_Pressure, Anxiety])
-Lung_Cancer = ConditionalProbabilityTable(table=lung_cancer_genetics_smoking,
+Lung_cancer = ConditionalProbabilityTable(table=lung_cancer_genetics_smoking,
                                                            parents=[Genetics, Smoking])
 Coughing = ConditionalProbabilityTable(table=coughing_allergy_lung_cancer,
-                                                           parents=[Allergy, Lung_Cancer])
+                                                           parents=[Allergy, Lung_cancer])
 Yellow_Fingers = ConditionalProbabilityTable(table=yellow_fingers_smoking,
                                                              parents=[Smoking])
-Fatigue = ConditionalProbabilityTable(table=fatigue_lung_cancer_coughing, parents=[Lung_Cancer,Coughing])
+Fatigue = ConditionalProbabilityTable(table=fatigue_lung_cancer_coughing, parents=[Lung_cancer,Coughing])
 Car_Accident = ConditionalProbabilityTable(table=car_accident_attention_fatigue,
-                                                             parents=[Attention, Fatigue])
+                                                             parents=[Attention_Disorder, Fatigue])
 
 states = {}
 states['Anxiety'] = State(Anxiety, name="Anxiety")
@@ -105,8 +105,8 @@ states['Peer_Pressure'] = State(Peer_Pressure, name="Peer_Pressure")
 states['Smoking'] = State(Smoking, name="Smoking")
 states['Yellow_Fingers'] = State(Yellow_Fingers, name="Yellow_Fingers")
 states['Genetics'] = State(Genetics, name="Genetics")
-states['Lung_Cancer'] = State(Lung_Cancer, name="Lung_Cancer")
-states['Attention'] = State(Attention, name="Attention")
+states['Lung_cancer'] = State(Lung_cancer, name="Lung_cancer")
+states['Attention_Disorder'] = State(Attention_Disorder, name="Attention_Disorder")
 states['Allergy'] = State(Allergy, name="Allergy")
 states['Coughing'] = State(Coughing, name="Coughing")
 states['Born_an_Even_Day'] = State(Born_an_Even_Day, name="Born_an_Even_Day")
@@ -119,15 +119,15 @@ network.add_states(*states.values())
 network.add_edge(states["Peer_Pressure"],states["Smoking"])
 network.add_edge(states["Anxiety"],states["Smoking"])
 network.add_edge(states["Smoking"],states["Yellow_Fingers"])
-network.add_edge(states["Genetics"],states["Lung_Cancer"])
-network.add_edge(states["Smoking"],states["Lung_Cancer"])
-network.add_edge(states["Genetics"],states["Attention"])
-network.add_edge(states['Lung_Cancer'], states["Coughing"])
+network.add_edge(states["Genetics"],states["Lung_cancer"])
+network.add_edge(states["Smoking"],states["Lung_cancer"])
+network.add_edge(states["Genetics"],states["Attention_Disorder"])
+network.add_edge(states['Lung_cancer'], states["Coughing"])
 network.add_edge(states['Allergy'], states["Coughing"])
 network.add_edge(states['Coughing'], states["Fatigue"])
-network.add_edge(states['Lung_Cancer'], states["Fatigue"])
+network.add_edge(states['Lung_cancer'], states["Fatigue"])
 network.add_edge(states["Fatigue"], states["Car_Accident"])
-network.add_edge(states["Attention"], states["Car_Accident"])
+network.add_edge(states["Attention_Disorder"], states["Car_Accident"])
 import ast
 network.bake()
 beliefs = network.predict_proba({"Genetics":"T"},max_iterations=100000)

@@ -30,14 +30,14 @@ def kernel_shap(f, x, reference, M):
     ws = {}
     for i, s in enumerate(powerset(range(M))):
         s = list(s)
-        print(s)
+        print(s,x,x[s])
         V[i, s] = x[s]
         X[i, s] = 1
         ws[len(s)] = ws.get(len(s), 0) + shapley_kernel(M, len(s))
         weights[i] = shapley_kernel(M, len(s))
     # print(X)
     # print(V)
-    exit()
+    # exit()
     y = f(V)
     tmp = np.linalg.inv(np.dot(np.dot(X.T, np.diag(weights)), X))
     return np.dot(tmp, np.dot(np.dot(X.T, np.diag(weights)), y))
@@ -69,3 +69,7 @@ explainer = shap.KernelExplainer(f, np.reshape(reference, (1, len(reference))))
 shap_values = explainer.shap_values(x)
 print("shap_values =", shap_values)
 print("base value =", explainer.expected_value)
+print(shap_values)
+shap.initjs()
+exit()
+print(shap.force_plot(explainer.expected_value, shap_values[0, :], x))

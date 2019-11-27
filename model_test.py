@@ -55,7 +55,7 @@ gini = 2 * roc_auc - 1
 print("GINI Score: ", gini)
 
 # Predictions for confusion matrix, accuracy
-predictions = [0 if output > 0.5 else 1 for output in predictions]
+predictions = [1 if output > 0.5 else 0 for output in predictions]
 
 # Accuracy Score
 accuracy = accuracy_score(y_test, predictions)
@@ -64,3 +64,7 @@ print("accuracy: ", accuracy)
 # Confusion Matrix
 confusion_matrix_value = confusion_matrix(y_test, predictions, labels=None, sample_weight=None)
 print("Confusion Matrix\n", confusion_matrix_value)
+
+print("Trained model")
+print("-"*100)
+
